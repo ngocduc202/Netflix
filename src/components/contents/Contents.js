@@ -62,7 +62,7 @@ export default Contents
 
 const GoToTop = styled.div`
   position : fixed ;
-  z-index : 10;
+  z-index : 120;
   right : 70px;
   bottom : 50px ;
   font-size : 50px ;
