@@ -91,3 +91,7 @@ export const getDocumentaries = () => async dispatch =>{
     console.log("Get  Documentaries error : " , error)
   }
 }
+
+export const setMovieDetail = (movie) => dispatch =>{
+  dispatch({type : Types.SET_MOVIE_DETAIL , payload : movie})
+}

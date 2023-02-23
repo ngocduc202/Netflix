@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import {FiChevronLeft , FiChevronRight} from "react-icons/fi"
 import {SmoothHorizontalScrolling} from "../../utils"
 import { useViewPort } from '../hooks'
+import { useDispatch } from 'react-redux'
+import { setMovieDetail } from '../store/actions'
 
 const MoviesRow = ({movies , title , isNetflix ,idSection}) => {
   const sliderRef = useRef()
@@ -11,6 +13,11 @@ const MoviesRow = ({movies , title , isNetflix ,idSection}) => {
   const [dragMove, setDragMove] = useState(0)
   const [isDrag, setIsDrag] = useState(false)
   const [windowWidth] = useViewPort()
+  const dispatch = useDispatch()
+
+  const handleSetMovie = (movie) =>{
+    dispatch(setMovieDetail(movie))
+  }
 
   const handleScrollRight = () => {
     const maxScrollLeft = sliderRef.current.scrollWidth - sliderRef.current.clientWidth
@@ -72,18 +79,22 @@ const MoviesRow = ({movies , title , isNetflix ,idSection}) => {
         }
         >
           {
-            movies && movies.length >0 && movies.map((items , index ) => {
-              if(items.poster_path && items.backdrop_path !== null){
+            movies && movies.length > 0 && movies.map((movie , index ) => {
+              if(movie.poster_path && movie.backdrop_path !== null){
                 let imageUrl = isNetflix
-                ? `https://image.tmdb.org/t/p/original/${items.poster_path}`
-                :   `https://image.tmdb.org/t/p/w500/${items.backdrop_path}`
+                ? `https://image.tmdb.org/t/p/original/${movie.poster_path}`
+                :   `https://image.tmdb.org/t/p/w500/${movie.backdrop_path}`
                 return (
-                  (
-                    <div key={index} className='movieItem' ref={movieRef} draggable="false">
-                    <img src={imageUrl} alt="" draggable="false" />
-                    <div className='movieName'>{items.title || items.name}</div>
-                  </div>
-                  )
+                  <div
+                  key={index}
+                  className='movieItem'
+                  ref={movieRef}
+                  draggable="false"
+                  onClick={() => handleSetMovie(movie)}
+                  >
+                  <img src={imageUrl} alt="" draggable="false" />
+                  <div className='movieName'>{movie.title || movie.name}</div>
+                </div>
                 )
               }
             }
