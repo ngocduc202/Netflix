@@ -1,23 +1,45 @@
-import React from 'react'
+import React, { useState } from 'react'
 import NetflixLogo from "../../assets/images/logo.png"
 import {AiOutlineSearch} from "react-icons/ai"
 import styled from 'styled-components'
 import { useScrollY } from '../hooks'
+import { useNavigate } from 'react-router-dom'
 
 const Navbar = () => {
 
   const [scrollY] = useScrollY()
 
+  const [keywords, setKeywords] = useState("")
+  const navigate = useNavigate()
+
+  const handleChangeInput = (e) => {
+      let keywords = e.target.value
+      setKeywords(keywords)
+      if(keywords.length > 0) {
+        navigate(`/search?keywords=${keywords.trim()}`)
+      }else navigate("/")
+
+  }
+
+  const goHome =() => {
+    navigate("/")
+    setKeywords("")
+  }
 
   return (
     <Navigation style={scrollY < 50 ? {backgroundColor: "transparent"} : {backgroundColor : "var(--color-background)"}}>
       <div className='navContainer'>
-        <div className='logo'>
+        <div className='logo' onClick={goHome}>
           <img src={NetflixLogo} alt="" />
         </div>
         <div className='navSearch'>
           <AiOutlineSearch className='iconSearch' />
-          <input type="text" placeholder='Nhập từ khóa tìm kiếm' />
+          <input
+          type="text"
+          placeholder='Nhập từ khóa tìm kiếm'
+          onChange={handleChangeInput}
+          value={keywords}
+          />
         </div>
       </div>
     </Navigation>
@@ -33,7 +55,7 @@ const Navigation = styled.div`
   top : 0;
   transition-timing-function : ease-in;
   transition : all 1s ;
-  z-index : 10;
+  z-index : 100;
 
   @media only srceen and (max-width : 600px){
     height : 100px;

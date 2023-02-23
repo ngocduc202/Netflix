@@ -1,28 +1,42 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import { useViewPort } from '../hooks'
+import { getSearchMovies, setMovieDetail } from '../store/actions'
 
 const moviesList = [
-  // "https://www.themoviedb.org/t/p/w533_and_h300_bestv2/r7Dfg9aRZ78gJsmDlCirIIlNH3d.jpg",
-  // "https://www.themoviedb.org/t/p/w533_and_h300_bestv2/r7Dfg9aRZ78gJsmDlCirIIlNH3d.jpg",
-  // "https://www.themoviedb.org/t/p/w533_and_h300_bestv2/r7Dfg9aRZ78gJsmDlCirIIlNH3d.jpg",
-  // "https://www.themoviedb.org/t/p/w533_and_h300_bestv2/r7Dfg9aRZ78gJsmDlCirIIlNH3d.jpg",
-  // "https://www.themoviedb.org/t/p/w533_and_h300_bestv2/r7Dfg9aRZ78gJsmDlCirIIlNH3d.jpg",
-  // "https://www.themoviedb.org/t/p/w533_and_h300_bestv2/r7Dfg9aRZ78gJsmDlCirIIlNH3d.jpg",
-  // "https://www.themoviedb.org/t/p/w533_and_h300_bestv2/r7Dfg9aRZ78gJsmDlCirIIlNH3d.jpg",
-  // "https://www.themoviedb.org/t/p/w533_and_h300_bestv2/r7Dfg9aRZ78gJsmDlCirIIlNH3d.jpg",
-  // "https://www.themoviedb.org/t/p/w533_and_h300_bestv2/r7Dfg9aRZ78gJsmDlCirIIlNH3d.jpg",
-  // "https://www.themoviedb.org/t/p/w533_and_h300_bestv2/r7Dfg9aRZ78gJsmDlCirIIlNH3d.jpg",
+  "https://www.themoviedb.org/t/p/w533_and_h300_bestv2/r7Dfg9aRZ78gJsmDlCirIIlNH3d.jpg",
+  "https://www.themoviedb.org/t/p/w533_and_h300_bestv2/r7Dfg9aRZ78gJsmDlCirIIlNH3d.jpg",
+  "https://www.themoviedb.org/t/p/w533_and_h300_bestv2/r7Dfg9aRZ78gJsmDlCirIIlNH3d.jpg",
+  "https://www.themoviedb.org/t/p/w533_and_h300_bestv2/r7Dfg9aRZ78gJsmDlCirIIlNH3d.jpg",
+  "https://www.themoviedb.org/t/p/w533_and_h300_bestv2/r7Dfg9aRZ78gJsmDlCirIIlNH3d.jpg",
+  "https://www.themoviedb.org/t/p/w533_and_h300_bestv2/r7Dfg9aRZ78gJsmDlCirIIlNH3d.jpg",
+  "https://www.themoviedb.org/t/p/w533_and_h300_bestv2/r7Dfg9aRZ78gJsmDlCirIIlNH3d.jpg",
+  "https://www.themoviedb.org/t/p/w533_and_h300_bestv2/r7Dfg9aRZ78gJsmDlCirIIlNH3d.jpg",
+  "https://www.themoviedb.org/t/p/w533_and_h300_bestv2/r7Dfg9aRZ78gJsmDlCirIIlNH3d.jpg",
+  "https://www.themoviedb.org/t/p/w533_and_h300_bestv2/r7Dfg9aRZ78gJsmDlCirIIlNH3d.jpg",
 ]
+
+const useQuery = () => new URLSearchParams(useLocation().search)
 
 const SearchMovies = () => {
 
   const [windowWidth] = useViewPort()
+  const dispatch = useDispatch()
+  const {SearchMovies} = useSelector(state => state.infoMovies)
+  const keywords = useQuery().get("keywords")
+
+  useEffect(() => {
+    if(keywords) dispatch(getSearchMovies(keywords))
+  }, [keywords , dispatch])
+
+  console.log(SearchMovies);
 
   return (
     <SearchPane>
         {
-          moviesList && moviesList.length > 0 ? (
+          SearchMovies && SearchMovies.length > 0 ? (
             <div
             className='searchContent'
             style={{
@@ -36,12 +50,21 @@ const SearchMovies = () => {
             }}
             >
               {
-                moviesList.map((movie , index) =>(
-                  <div className='movieItem'>
-                  <img src={movie} alt="" />
-                    <span>MovieName</span>
-                  </div>
-                ))
+                SearchMovies.map((movie , index) => {
+                  if(movie.backdrop_path !== null && movie.media_type !== "person") {
+                    const imageURL = `https://image.tmdb.org/t/p/w500/${movie.backdrop_path}`
+                    return (
+                      <div
+                      className='movieItem'
+                      key={index}
+                      onClick={() => dispatch(setMovieDetail(movie))}
+                      >
+                      <img src={imageURL} alt="" />
+                        <span>{movie.title || movie.name}</span>
+                      </div>
+                    )
+                  }
+                })
               }
             </div>
           ) : (
@@ -68,7 +91,7 @@ const SearchPane = styled.div`
     display : grid ;
     gap : 8px ;
 
-    &:hover movieItem {
+    &:hover .movieItem {
       opacity : 0.7 ;
     }
 

@@ -6,7 +6,9 @@ import Contents from './components/contents/Contents';
 import Menus from './components/Menu/Menus';
 import MovieDetail from './components/MovieDetail/MovieDetail';
 import { useSelector } from 'react-redux';
-import SearchMovies from './components/SearchMovies/SearchMovies';
+import Home from './components/Pages/Home';
+import { BrowserRouter , Routes ,Route} from 'react-router-dom';
+import Search from './components/Pages/Search';
 
 function App() {
 
@@ -14,12 +16,19 @@ function App() {
 
   return (
     <div className="App">
+      <BrowserRouter>
       <Navbar />
+      <Routes>
+          <Route exact path='/' element={<Home />} />
+          <Route path='/search' element={<Search />} />
+      </Routes>
+      </BrowserRouter>
       {/* <Intro />
       <Contents />
       <Menus />
       <MovieDetail movie={MoviesDetail} showModal={MoviesDetail ? true : false} /> */}
-      <SearchMovies />
+      {/* <SearchMovies /> */}
+      {/* <Home /> */}
     </div>
   );
 }
