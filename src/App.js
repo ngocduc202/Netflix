@@ -6,6 +6,7 @@ import Contents from './components/contents/Contents';
 import Menus from './components/Menu/Menus';
 import MovieDetail from './components/MovieDetail/MovieDetail';
 import { useSelector } from 'react-redux';
+import SearchMovies from './components/SearchMovies/SearchMovies';
 
 function App() {
 
@@ -14,10 +15,11 @@ function App() {
   return (
     <div className="App">
       <Navbar />
-      <Intro />
+      {/* <Intro />
       <Contents />
       <Menus />
-      <MovieDetail movie={MoviesDetail} showModal={MoviesDetail ? true : false} />
+      <MovieDetail movie={MoviesDetail} showModal={MoviesDetail ? true : false} /> */}
+      <SearchMovies />
     </div>
   );
 }
