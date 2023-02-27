@@ -69,7 +69,7 @@ const SearchMovies = () => {
             </div>
           ) : (
             <NotFound>
-              <h1>Your search for " adawdawaw" did not have any matches</h1>
+              <h1>Your search for "{keywords}" did not have any matches</h1>
             </NotFound>
           )
         }
